@@ -7,6 +7,9 @@ rank = comm.Get_rank()
 
 if rank == 0:
         data = np.arange(0,10000,0.01).reshape((1000, 1000))       
+        print "Determinant of A : ", np.linalg.det(data)
+        print "Determinant of B : ", np.linalg.det(data.T)
+	
 else:
         data = None
 
@@ -23,9 +26,10 @@ A = np.matrix(A)
 #print A
 #print " at rank %r A is of shape %r" %(rank,A.shape)
 B = A.T[:,ranges[0]:ranges[1]]
+
 #print " at rank %r B is of shape %r" %(rank,B.shape)
 product = A * B
-print " at rank %r product is of shape %r" %(rank,product.shape)
+print " at rank %r product is of shape %r \n" %(rank,product.shape)
 final_product = comm.gather(product, root=0)
 
 if rank == 0:
@@ -35,9 +39,11 @@ if rank == 0:
 		else:
 			C_2 = final_product[i]
 	print "finished"
-	print C_2.shape
-	print " Final product rank :", C_2.shape
-	print " Final product flatten :", C_2.flatten().shape
+        print "Determinant of Product : ", np.linalg.det(C_2)
+
+	#print C_2.shape
+	#print " Final product rank :", C_2.shape
+	#print " Final product flatten :", C_2.flatten().shape
 	dat = np.matrix(data) * np.matrix(data).T
 	#print C_2.flatten()
 

@@ -8,7 +8,11 @@ if rank==0:
 	print "Starting Process"
 	A = np.arange(0,10000,0.01).reshape((1000, 1000))
 	A = np.matrix(A)
+	print " Determinant of A : ", np.linalg.det(A)
+
 	B = A.T
+	print " Determinant of B : ", np.linalg.det(B)
+
 	print " sending B matrix across"
 	comm.send(B[:,100:200], dest=1, tag=21)
 	comm.send(B[:,200:300], dest=2, tag=21)
@@ -37,10 +41,11 @@ if rank==0:
 			C_2 = np.hstack((C_2,C_dic[i]))
 		else:
 			C_2 = C_dic[i]
+	print " Determinant of Product : ", np.linalg.det(C_2)
 	print "job done"
 
 else:
-	print "Starting slave node :", rank
+	#print "Starting slave node :", rank
 	A = np.arange(0,10000,0.01).reshape((1000, 1000))
 	A = np.matrix(A)
 
